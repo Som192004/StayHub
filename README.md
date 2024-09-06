@@ -51,15 +51,22 @@ npm run dev
 ## 🔗 Screenshots
 
 ![Screenshot (44)](https://github.com/user-attachments/assets/a65a9183-a82d-4659-8933-a15f9cf920ea)
+---
 
 ![Screenshot (45)](https://github.com/user-attachments/assets/cfa91d2c-169e-46f6-8179-b60b7613994c)
+---
 
 ![Screenshot (46)](https://github.com/user-attachments/assets/8b05fb62-3b4c-40bf-98d6-2ac09ce976e1)
+---
 
 ![Screenshot (47)](https://github.com/user-attachments/assets/34c5e82d-f14a-40e6-bf06-1f6265a6885f)
+---
 
 ![Screenshot (48)](https://github.com/user-attachments/assets/f0272758-02c3-4350-a9e3-60ce3983c5a0)
+---
 
 ![Screenshot (49)](https://github.com/user-attachments/assets/1b11ec7a-ffb1-4999-9e63-f360903d6242)
+---
 
 ![Screenshot (50)](https://github.com/user-attachments/assets/4a3a1ad9-2aca-4232-afd6-292038386c37)
+---
