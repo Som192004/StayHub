@@ -85,8 +85,8 @@ app.get('/profile' , (req,res) => {
     if(token){
         jwt.verify(token , jwtSecret , {}, async (err,user) => {
             if(err) throw err ;
-            const {name , email , _id} = await User.findById(user.id);
-            res.json({name , email , _id});
+            const {name , email , _id , likedPlaces} = await User.findById(user.id);
+            res.json({name , email , _id , likedPlaces});
         })
     }else{
         res.json({}) ;
@@ -132,31 +132,61 @@ app.post('/upload' , photosMiddleware.array('files' , 100) ,(req,res) => {
     res.json(uploadedFiles) ;
 })
 
-app.post('/place' , (req,res) => {
-    const {token} = req.cookies ;
-    const {title ,address , addedPhotos , description , perks , extraInfo , checkIn , checkOut , maxGuest , price} = req.body ;
+app.post('/place', async (req, res) => {
+    const { token } = req.cookies;
+    const {
+        title,
+        address,
+        addedPhotos,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+        price
+    } = req.body;
 
-    jwt.verify(token , jwtSecret , {}, async (err,user) => {
-        if(err) throw err ;
-        console.log('user id in post  : ',user.id);
+    try {
+        // Verify JWT token
+        const user = jwt.verify(token, jwtSecret);
+        console.log('User ID in post:', user.id);
+
+        // Validate and parse dates
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+        const maxGuestsNumber = parseInt(maxGuests, 10);
+        const priceNumber = parseFloat(price);
+
+        // Ensure date conversion and number parsing are valid
+        if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+            return res.status(400).json({ error: 'Invalid date format' });
+        }
+        if (isNaN(maxGuestsNumber) || isNaN(priceNumber)) {
+            return res.status(400).json({ error: 'Invalid number format' });
+        }
+
+        // Create new place document
         const placeDoc = await place.create({
-            owner : user.id ,
-            title : title , 
-            address : address , 
-            photos : addedPhotos ,
-            description : description ,
-            perks : perks ,
-            extraInfo : extraInfo ,
-            checkIn : Number(checkIn) ,
-            checkOut : Number(checkOut) ,
-            maxGuests : Number(maxGuest) , 
-            price : Number(price) ,
-        })
+            owner: user.id,
+            title,
+            address,
+            photos: addedPhotos,
+            description,
+            perks,
+            extraInfo,
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+            maxGuests: maxGuestsNumber,
+            price: priceNumber,
+        });
 
-        res.json(placeDoc); 
-    })
-    
-})
+        res.json(placeDoc);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while creating the place' });
+    }
+});
 
 app.get('/places' , (req,res) => {
     const {token} = req.cookies ;
@@ -230,6 +260,29 @@ app.get('/all-bookings', async (req, res) => {
     }
 });
 
+app.post('/places/:placeId/like', async (req, res) => {
+    const { userId } = req.body; // Assuming you're sending the user ID in the request body
+    const { placeId } = req.params;
+  
+    try {
+      // Find the user and update the liked places array
+      const user = await User.findById(userId);
+      const isLiked = user.likedPlaces.includes(placeId);
+  
+      if (isLiked) {
+        // If the place is already liked, remove it from the liked places
+        user.likedPlaces = user.likedPlaces.filter(id => id !== placeId);
+      } else {
+        // If not liked, add it to the liked places
+        user.likedPlaces.push(placeId);
+      }
+  
+      await user.save();
+      res.status(200).json({ success: true, isLiked: !isLiked });
+    } catch (error) {
+      res.status(500).json({ success: false, error: 'Something went wrong' });
+    }
+  });
 
 app.get('/' , (req,res) => {
     res.send('Welcome to the server of the StayHub')

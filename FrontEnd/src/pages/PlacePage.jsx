@@ -245,10 +245,11 @@ export default function PlacePage() {
                 </div>
                 <div className="px-6 py-2">
                     <h2 className="text-2xl font-semibold">Extra Info</h2>
-                </div>
-                <div className=" text-sm text-gray-800 leading-6 p-4 border border-gray-300 bg-gray-50">
+                    <p className="text-gray-700 leading-6 bg-gray-50 pb-4">
                     {place.extraInfo}
+                </p>
                 </div>
+                
             </div>
             
         </div>

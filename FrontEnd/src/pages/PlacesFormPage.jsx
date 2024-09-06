@@ -20,6 +20,7 @@ const PlacesFormPage = () => {
     const [maxGuests , setMaxGuests] = useState(1) ;
     const [redirect , setRedirect] = useState(false) ;
     const [price , setPrice] = useState(100) ;
+    const [loading , setLoading] = useState(false);
 
     useEffect(() => {
         if(!id){
@@ -42,13 +43,32 @@ const PlacesFormPage = () => {
             }) ;
         }
     },[id])
-    async function addPhotoByLink(e){
-        e.preventDefault() ;
-        const {data:filename} = await axios.post('/upload-by-link' , {link : photoLink}) ;
-        setAddedPhotos(prev => {
-            return [...prev , filename];
-        })
-        setPhotoLink('') ;
+    async function addPhotoByLink(e) {
+        e.preventDefault();
+        
+        setLoading(true);
+        
+        try {
+            // Send POST request to server
+            const { data: filename } = await axios.post('/upload-by-link', { link: photoLink });
+    
+            // Update state with the new photo
+            setAddedPhotos(prev => [...prev, filename]);
+    
+            // Clear the input field
+            setPhotoLink('');
+    
+            // Optional: Show a success message
+            // alert('Photo added successfully!');
+        } catch (error) {
+            // Handle error and show message to user
+            console.error('Error uploading photo:', error);
+            // Optional: Show an error message
+            alert('Failed to upload photo. Please try again later.');
+        } finally {
+            // Optional: Reset loading state
+            setLoading(false);
+        }
     }
 
     async function uploadPhoto(e){
@@ -122,7 +142,19 @@ const PlacesFormPage = () => {
                         value={photoLink}
                         onChange={e => setPhotoLink(e.target.value)} placeholder="Add using a link ...jpg" />
 
-                        <button onClick = {addPhotoByLink} className ="bg-primary px-4 rounded-2xl">Add&nbsp;Photo</button>
+                    <button 
+                        onClick={addPhotoByLink} 
+                        className="bg-primary px-6 py-3 rounded-2xl flex items-center justify-center"
+                    >
+                        {loading ? (
+                            <i className="fa-solid fa-circle-notch fa-spin text-white"></i> // Tailwind class for spin
+                        ) : (
+                            'Add Photo'
+                        )}
+                    </button>
+
+
+
                     </div>
                     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 p-6">
                         {addedPhotos.length > 0 && addedPhotos.map(link => (
@@ -177,13 +209,13 @@ const PlacesFormPage = () => {
                     <p className="text-gray-500 text-sm">add check in and out times , remember to have some time window for cleaning the room between guests </p>
                     <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
                     <div>
-                        <h3 className="mt-2 -mb-1">Check In time</h3>
-                        <input type='text' placeholder="14:00"
+                        <h3 className="mt-2 -mb-1">Check In</h3>
+                        <input type='date' placeholder="YYYY/MM/DD"
                         value={checkIn} onChange={e => setCheckIn(e.target.value)}/>
                     </div>
                     <div>
-                        <h3 className="mt-2 -mb-1">Check out time </h3>
-                        <input type='text' placeholder="11:00"
+                        <h3 className="mt-2 -mb-1">Check out</h3>
+                        <input type='date' placeholder="YYYY/MM/DD"
                         value={checkOut} onChange={e => setCheckOut(e.target.value)} />
                     </div>
                     <div>

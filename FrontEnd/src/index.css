@@ -14,3 +14,13 @@ button.primary{
     background-color: #F53850;
     @apply bg-primary p-2 w-full rounded-2xl ;
 }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
