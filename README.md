@@ -21,10 +21,10 @@ git clone https://github.com/Som192004/StayHub.git
 2.Install dependencies
 
 ```bash
-cd Backend
+cd BackEnd
 npm install
 
-cd Frontend
+cd FrontEnd
 npm install
 ```
 
