@@ -29,7 +29,7 @@ export default function SingleBookingPage(){
                 <div className="p-6">
                     <h1 className="text-4xl font-bold mb-4">{booking.bookingplace.title}</h1>
                     <div className="p-2 flex justify-between">
-                        <span>Number of Guests: {booking.bookingplace.numberOfGuests}</span>
+                        <span>Number of Guests: {booking.numberOfGuests}</span>
                         <span className="text-lg font-bold">Total: ${booking.bookingplace.price}</span>
                     </div>
 
