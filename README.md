@@ -10,8 +10,6 @@
 
 Developed an online platform allowing users to browse and book properties such as hotels and rooms. Implemented user authentication with account creation, login. Enabled users to view available rental properties and accommodations, and manage personal bookings. Provided functionality for property owners to list and manage their own accommodations. Focused on delivering a seamless user experience with real-time booking and property management features.
 
-## 🔗 Data Model
-![Image](https://github.com/user-attachments/assets/507a68c6-4f07-440a-8426-24491135ea71)
 ## 🔗 Installation
 
 1.Clone this repository:
